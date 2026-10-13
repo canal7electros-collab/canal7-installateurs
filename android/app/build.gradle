@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+android {
+  namespace 'fr.canal7.app'
+  compileSdk 34
+  defaultConfig {
+    applicationId 'fr.canal7.app'
+    minSdk 21
+    targetSdk 34
+    versionCode (System.getenv('VERSION_CODE') ? System.getenv('VERSION_CODE').toInteger() : 1)
+    versionName '1.0'
+    manifestPlaceholders = [hostName: 'canal7-app.pages.dev', defaultUrl: 'https://canal7-app.pages.dev/', launcherName: 'Canal 7']
+  }
+  signingConfigs {
+    release {
+      storeFile file('canal7.p12')
+      storeType 'pkcs12'
+      storePassword System.getenv('KS_PW')
+      keyAlias 'canal7'
+      keyPassword System.getenv('KS_PW')
+    }
+  }
+  buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+  compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+dependencies { implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0' }
