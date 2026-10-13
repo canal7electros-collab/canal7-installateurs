@@ -12,7 +12,7 @@
     "productName": "Canal 7",
     "directories": { "buildResources": "build" },
     "files": ["main.js", "package.json"],
-    "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }], "category": "public.app-category.productivity", "identity": null, "artifactName": "Canal7.dmg" },
+    "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }], "category": "public.app-category.productivity", "artifactName": "Canal7.dmg" },
     "win": { "target": ["nsis"], "artifactName": "Canal7-Setup.exe" },
     "nsis": { "oneClick": true, "perMachine": false, "createDesktopShortcut": true, "shortcutName": "Canal 7" }
   }
