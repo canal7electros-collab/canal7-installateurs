@@ -22,9 +22,20 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
-      - working-directory: desktop
-        env: { CSC_IDENTITY_AUTO_DISCOVERY: 'false' }
-        run: npm install && npm run dist -- --mac
+      - name: DMG signé + notarisé
+        working-directory: desktop
+        env:
+          CSC_LINK: '${{ secrets.CSC_LINK }}'
+          CSC_KEY_PASSWORD: '${{ secrets.CSC_KEY_PASSWORD }}'
+          APPLE_API_KEY_P8: '${{ secrets.APPLE_API_KEY_P8 }}'
+          APPLE_API_KEY_ID: K42HC4GHM4
+          APPLE_API_ISSUER: 69a6de96-7a87-47e3-e053-5b8c7c11a4d1
+        run: |
+          printf '%s' "$APPLE_API_KEY_P8" > "$RUNNER_TEMP/AuthKey.p8"
+          export APPLE_API_KEY="$RUNNER_TEMP/AuthKey.p8"
+          npm install && npm run dist -- --mac
+          codesign --verify --deep --strict --verbose=2 "dist/mac-universal/Canal 7.app"
+          spctl -a -vvv -t exec "dist/mac-universal/Canal 7.app"
       - uses: actions/upload-artifact@v4
         with: { name: mac, path: desktop/dist/Canal7.dmg }
   windows:
